@@ -7,17 +7,38 @@
 </head>
 <body>
   <header>
-    <h1>MFlix Movie Database</h1>
+    <!-- Título clicável -->
+    <h1><a href="index.html" class="logo">MFlix Movie Database</a></h1>
+
     <div class="search-container">
-      <input type="text" id="search-input" placeholder="Search movies…">
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Search movies…"
+        aria-label="Buscar filmes"
+      >
       <button id="search-button">Search</button>
     </div>
   </header>
+
   <main>
     <div id="loading">Loading movies…</div>
     <div id="error" class="hidden"></div>
+
+    <!-- Grid de filmes -->
     <div class="grid" id="movies-container"></div>
+
+    <!-- Paginação -->
+    <nav class="pagination" aria-label="Paginação de filmes">
+      <button id="prev-page" disabled>‹ Anterior</button>
+      <span>
+        Página <strong id="current-page">1</strong> de
+        <strong id="total-pages">?</strong>
+      </span>
+      <button id="next-page">Próximo ›</button>
+    </nav>
   </main>
+
   <script src="main.js"></script>
 </body>
 </html>

@@ -1,29 +1,45 @@
+// functions/getMovies.js
+
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 
-// Connection parameters
-const uri              = process.env.MONGODB_URI;
-const dbName           = process.env.MONGODB_DB_NAME || 'sample_mflix';
-const collectionName   = process.env.MONGODB_COLLECTION_NAME || 'movies';
+const uri            = process.env.MONGODB_URI;
+const dbName         = process.env.MONGODB_DB_NAME      || 'sample_mflix';
+const collectionName = process.env.MONGODB_COLLECTION_NAME || 'movies';
 
-// Response headers
 const headers = {
   'Access-Control-Allow-Origin': '*',
   'Content-Type': 'application/json',
   'Cache-Control': 'public, max-age=60'
 };
 
+// Cache de conexão para acelerar cold-start
+let cachedClient = null;
+let cachedDb     = null;
+async function getDb() {
+  if (cachedDb) return cachedDb;
+  if (!cachedClient) {
+    cachedClient = new MongoClient(uri, {
+      useNewUrlParser:    true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000
+    });
+    await cachedClient.connect();
+  }
+  cachedDb = cachedClient.db(dbName);
+  return cachedDb;
+}
+
 exports.handler = async (event) => {
-  const client = new MongoClient(uri, {
-    useNewUrlParser:    true,
-    useUnifiedTopology: true
-  });
-
   try {
-    await client.connect();
-    const db = client.db(dbName);
+    const db = await getDb();
 
-    // Build optional search query
+    // Leitura de paginação
+    const page  = parseInt(event.queryStringParameters?.page)  || 1;
+    const limit = parseInt(event.queryStringParameters?.limit) || 16;
+    const skip  = (page - 1) * limit;
+
+    // Leitura de busca (se houver)
     const search = event.queryStringParameters?.search || '';
     let query = {};
     if (search) {
@@ -37,34 +53,30 @@ exports.handler = async (event) => {
       };
     }
 
-    // Fetch movies
-    const movies = await db
-      .collection(collectionName)
+    // Conta total para paginação
+    const totalCount = await db.collection(collectionName)
+                               .countDocuments(query);
+
+    // Busca atual com skip & limit
+    const movies = await db.collection(collectionName)
       .find(query)
-      .project({
-        title:  1,
-        year:   1,
-        poster: 1,
-        genres: 1,
-        'imdb.rating': 1
-      })
-      .sort({ year: -1 })
-      .limit(32)
+      .skip(skip)
+      .limit(limit)
+      .project({ title:1, year:1, poster:1, genres:1, 'imdb.rating':1 })
+      .sort({ year:-1 })
       .toArray();
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify(movies)
+      body: JSON.stringify({ movies, totalCount })
     };
 
-  } catch (error) {
+  } catch (err) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: error.message })
+      body: JSON.stringify({ error: err.message })
     };
-  } finally {
-    await client.close();
   }
 };
