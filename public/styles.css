@@ -109,6 +109,7 @@ header h1 {
   margin-top: 0;
 }
 .comment {
+  clear: both;
   margin-bottom: 0.5rem;
   border-bottom: 1px solid #ddd;
   padding-bottom: 0.5rem;
