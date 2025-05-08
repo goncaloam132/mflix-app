@@ -1,0 +1,15 @@
+{
+  "name": "mongodb-netlify-movie-app",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "netlify build"
+  },
+  "dependencies": {
+    "mongodb": "^5.7.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "netlify-cli": "^15.9.0"
+  }
+}

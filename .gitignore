@@ -1,0 +1,24 @@
+# Node.js
+node_modules/
+
+# Env files
+.env
+
+# Netlify local state
+.netlify/
+.netlify/state.json
+.netlify/edge-functions-import-map.json
+
+# Lock files
+package-lock.json
+
+# Editor config / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
