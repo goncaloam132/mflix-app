@@ -121,6 +121,28 @@ header h1 {
   font-size: 1.2rem;
   cursor: pointer;
 }
+/* Garante que as ações ﬁquem alinhadas e do mesmo tamanho do detail-content */
+.actions {
+  max-width: 800px;      /* mesma largura de #detail-content */
+  margin: 1rem auto;     /* centraliza e afasta do bloco acima */
+  display: flex;         /* botões em linha */
+  justify-content: flex-end; /* alinhados à direita */
+  gap: 0.5rem;           /* espaço entre botões */
+  clear: both;           /* abaixo de qualquer float interno */
+}
+
+/* Estilização dos botões */
+.actions button {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.actions button:hover {
+  background: #0056b3;
+}
 
 .pagination {
   display: flex;
@@ -152,4 +174,21 @@ a.logo:hover,
 a.logo:visited {
   color: inherit;
   text-decoration: none;
+}
+.hidden {
+  display: none;
+}
+.btn {
+  display: inline-block;
+  background: #0056b3;       
+  color: #fff;               
+  padding: 0.5rem 1rem;      
+  border-radius: 4px;        
+  text-decoration: none;     
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.btn:hover {
+  background: #063c76;       /* tom mais escuro ao passar o mouse */
 }

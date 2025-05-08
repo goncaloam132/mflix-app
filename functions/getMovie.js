@@ -11,7 +11,7 @@ const commentsCollection  = process.env.MONGODB_COMMENTS_COLLECTION || 'comments
 const headers = {
   'Access-Control-Allow-Origin': '*',
   'Content-Type': 'application/json',
-  'Cache-Control': 'public, max-age=300'
+  'Cache-Control': 'no-cache, no-store, must-revalidate'
 };
 
 exports.handler = async (event) => {

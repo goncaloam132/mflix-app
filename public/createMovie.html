@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>New Movie</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1><a href="index.html" class="logo">MFlix</a> - Create Movie</h1>
+  </header>
+  <main>
+    <form id="create-form">
+      <label>
+        Título:<br>
+        <input name="title" required>
+      </label><br>
+
+      <label>
+        Ano:<br>
+        <input name="year" type="number">
+      </label><br>
+
+      <label>
+        Poster (URL):<br>
+        <input name="poster">
+      </label><br>
+
+      <label>
+        Gêneros (vírgula):<br>
+        <input name="genres">
+      </label><br>
+
+      <label>
+        Nota IMDB:<br>
+        <input name="rating" type="number" step="0.1" min="0" max="10">
+      </label><br>
+
+      <label>
+        Descrição (Plot):<br>
+        <textarea name="plot" rows="4"></textarea>
+      </label><br>
+
+      <label>
+        Diretores (vírgula):<br>
+        <input name="directors">
+      </label><br>
+
+      <label>
+        Elenco (vírgula):<br>
+        <input name="cast">
+      </label><br>
+
+      <button type="submit">Criar Filme</button>
+    </form>
+    <div id="msg"></div>
+  </main>
+  <script src="createMovie.js"></script>
+</body>
+</html>

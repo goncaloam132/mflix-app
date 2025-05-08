@@ -13,10 +13,32 @@
   <main>
     <div id="loading">Loading details…</div>
     <div id="error" class="hidden"></div>
-    <div id="detail-content" class="hidden">
-      <!-- Será preenchido por movie.js -->
+    <div id="detail-content" class="hidden"></div>
+    <div class="actions">
+      <button id="edit-button">Edit</button>
+      <button id="delete-button">Delete</button>
     </div>
   </main>
+
+  <!-- Formulário oculto de edição -->
+  <form id="edit-form" class="hidden">
+    <label>Título: <input name="title"></label><br>
+    <label>Ano:    <input name="year" type="number"></label><br>
+    <label>Poster: <input name="poster"></label><br>
+    <label>Gêneros: <input name="genres"></label><br>
+    <label>Nota:   <input name="rating" step="0.1" min="0" max="10"></label><br>
+    <label>Descrição (Plot):<br>
+      <textarea name="plot" rows="3"></textarea>
+    </label><br>
+    <label>Diretores (vírgula):<br>
+      <input name="directors">
+    </label><br>
+    <label>Elenco (vírgula):<br>
+      <input name="cast">
+    </label><br>
+    <button type="submit">Salvar</button>
+  </form>
+
   <script src="movie.js"></script>
 </body>
 </html>
