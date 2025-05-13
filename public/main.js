@@ -1,33 +1,67 @@
+// public/main.js
 document.addEventListener('DOMContentLoaded', () => {
-  const grid            = document.getElementById('movies-container');
-  const load            = document.getElementById('loading');
-  const err             = document.getElementById('error');
-  const searchInput     = document.getElementById('search-input');
-  const searchButton    = document.getElementById('search-button');
-  const prevPageButton  = document.getElementById('prev-page');
-  const nextPageButton  = document.getElementById('next-page');
-  const currentPageElem = document.getElementById('current-page');
-  const totalPagesElem  = document.getElementById('total-pages');
+  const grid             = document.getElementById('movies-container');
+  const load             = document.getElementById('loading');
+  const errElem          = document.getElementById('error');
+  const searchInput      = document.getElementById('search-input');
+  const searchButton     = document.getElementById('search-button');
+  const prevPageButton   = document.getElementById('prev-page');
+  const nextPageButton   = document.getElementById('next-page');
+  const currentPageElem  = document.getElementById('current-page');
+  const totalPagesElem   = document.getElementById('total-pages');
+
+  // novos controles
+  const yearMinInput     = document.getElementById('year-min');
+  const yearMaxInput     = document.getElementById('year-max');
+  const sortFieldInput   = document.getElementById('sort-field');
+  const sortOrderInput   = document.getElementById('sort-order');
+  const applyFiltersBtn  = document.getElementById('apply-filters');
 
   let currentPage = 1;
-  const pageSize = 16;
-  let totalPages = 1;
+  const pageSize  = 16;
+  let totalPages  = 1;
 
   async function fetchMovies(query = '', page = 1) {
-    // UI: mostrar loading e limpar estado
-    load.style.display = 'block';
-    err.style.display  = 'none';
-    grid.innerHTML     = '';
+    // mostra loading e limpa estado
+    load.style.display      = 'block';
+    errElem.style.display   = 'none';
+    grid.innerHTML          = '';
     prevPageButton.disabled = true;
     nextPageButton.disabled = true;
 
-    try {
-      // Monta parâmetros na URL
-      const params = new URLSearchParams();
-      if (query) params.append('search', query);
-      params.append('page', page);
-      params.append('limit', pageSize);
+    // prepara URLSearchParams
+    const params = new URLSearchParams();
+    if (query) params.append('search', query);
+    params.append('page', page);
+    params.append('limit', pageSize);
 
+    // só append se o input não estiver em branco e for número válido
+    const rawMin = yearMinInput.value.trim();
+    if (rawMin !== '') {
+      const ym = parseInt(rawMin, 10);
+      if (!isNaN(ym)) {
+        // clamp visual a 1900–2025
+        const clamped = Math.max(1900, Math.min(2025, ym));
+        yearMinInput.value = clamped;
+        params.append('yearMin', clamped);
+      }
+    }
+
+    const rawMax = yearMaxInput.value.trim();
+    if (rawMax !== '') {
+      const yM = parseInt(rawMax, 10);
+      if (!isNaN(yM)) {
+        const clamped = Math.max(1900, Math.min(2025, yM));
+        yearMaxInput.value = clamped;
+        params.append('yearMax', clamped);
+      }
+    }
+
+    // ordenação (tem sempre um valor válido nos selects)
+    params.append('sortField', sortFieldInput.value);
+    params.append('sortOrder', sortOrderInput.value);
+
+    try {
       const url = `/.netlify/functions/getMovies?${params.toString()}`;
       const res = await fetch(url);
       if (!res.ok) {
@@ -35,24 +69,22 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(errJson.error || res.statusText);
       }
 
-      // Função agora retorna { movies, totalCount }
       const { movies, totalCount } = await res.json();
       if (!movies.length) throw new Error('Nenhum filme encontrado.');
 
-      // Atualiza paginação
+      // atualiza paginação
       totalPages = Math.ceil(totalCount / pageSize);
       currentPage = page;
       currentPageElem.textContent = currentPage;
       totalPagesElem.textContent  = totalPages;
-      prevPageButton.disabled = currentPage === 1;
-      nextPageButton.disabled = currentPage === totalPages;
+      prevPageButton.disabled     = currentPage === 1;
+      nextPageButton.disabled     = currentPage === totalPages;
 
-      // Renderiza
       renderMovies(movies);
 
     } catch (e) {
-      err.textContent   = e.message;
-      err.style.display = 'block';
+      errElem.textContent   = e.message;
+      errElem.style.display = 'block';
     } finally {
       load.style.display = 'none';
     }
@@ -70,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <h3>${m.title}</h3>
           <p>${m.year || 'N/A'}</p>
           <div class="tags">
-            ${(m.genres || []).map(g => `<span class="tag">${g}</span>`).join('')}
+            ${(m.genres||[]).map(g=>`<span class="tag">${g}</span>`).join('')}
           </div>
           <button class="view-button" data-id="${m._id}">
             VIEW DETAILS
@@ -85,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Event handlers
+  // handlers
   searchButton.addEventListener('click', () =>
     fetchMovies(searchInput.value.trim(), 1)
   );
@@ -93,16 +125,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter') fetchMovies(searchInput.value.trim(), 1);
   });
   prevPageButton.addEventListener('click', () => {
-    if (currentPage > 1) {
+    if (currentPage > 1)
       fetchMovies(searchInput.value.trim(), currentPage - 1);
-    }
   });
   nextPageButton.addEventListener('click', () => {
-    if (currentPage < totalPages) {
+    if (currentPage < totalPages)
       fetchMovies(searchInput.value.trim(), currentPage + 1);
-    }
   });
+  applyFiltersBtn.addEventListener('click', () =>
+    fetchMovies(searchInput.value.trim(), 1)
+  );
 
-  // Carregamento inicial
+  // carregamento inicial SEM filtros
   fetchMovies('', 1);
 });

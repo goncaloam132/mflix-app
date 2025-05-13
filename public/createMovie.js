@@ -36,3 +36,7 @@ document.getElementById('create-form').addEventListener('submit', async (e) => {
     document.getElementById('msg').textContent = `Erro: ${err.message}`;
   }
 });
+
+document.getElementById('home-button').addEventListener('click', () => {
+  window.location.href = 'index.html';
+});

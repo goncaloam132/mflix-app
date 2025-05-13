@@ -7,7 +7,6 @@
 </head>
 <body>
   <header>
-    <!-- Título clicável -->
     <h1><a href="index.html" class="logo">MFlix Movie Database</a></h1>
     <a href="createMovie.html" class="btn">Add Movie</a>
 
@@ -22,21 +21,50 @@
     </div>
   </header>
 
+  <!-- CONTROLES DE FILTRO E ORDENAÇÃO -->
+  <section class="controls">
+    <input
+      id="year-min"
+      type="number"
+      placeholder="Ano mínimo"
+      min="1900"
+      max="2025"
+    >
+    <input
+      id="year-max"
+      type="number"
+      placeholder="Ano máximo"
+      min="1900"
+      max="2025"
+    >
+
+    <select id="sort-field">
+      <option value="year">Ano</option>
+      <option value="title">Título</option>
+      <option value="imdb.rating">Nota IMDB</option>
+    </select>
+
+    <select id="sort-order">
+      <option value="desc">Descendente</option>
+      <option value="asc">Ascendente</option>
+    </select>
+
+    <button id="apply-filters">Filtrar & Ordenar</button>
+  </section>
+
   <main>
     <div id="loading">Loading movies…</div>
     <div id="error" class="hidden"></div>
 
-    <!-- Grid de filmes -->
     <div class="grid" id="movies-container"></div>
 
-    <!-- Paginação -->
     <nav class="pagination" aria-label="Paginação de filmes">
       <button id="prev-page" disabled>‹ Anterior</button>
       <span>
         Página <strong id="current-page">1</strong> de
         <strong id="total-pages">?</strong>
       </span>
-      <button id="next-page">Próximo ›</button>
+      <button id="next-page" disabled>Próximo ›</button>
     </nav>
   </main>
 
