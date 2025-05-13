@@ -192,3 +192,9 @@ a.logo:visited {
 .btn:hover {
   background: #063c76;       
 }
+
+#filter-panel {
+  padding: 1rem;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}

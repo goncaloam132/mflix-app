@@ -1,4 +1,3 @@
-// public/main.js
 document.addEventListener('DOMContentLoaded', () => {
   const grid             = document.getElementById('movies-container');
   const load             = document.getElementById('loading');
@@ -9,20 +8,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const nextPageButton   = document.getElementById('next-page');
   const currentPageElem  = document.getElementById('current-page');
   const totalPagesElem   = document.getElementById('total-pages');
-
-  // novos controles
   const yearMinInput     = document.getElementById('year-min');
   const yearMaxInput     = document.getElementById('year-max');
   const sortFieldInput   = document.getElementById('sort-field');
   const sortOrderInput   = document.getElementById('sort-order');
+  const toggleFiltersBtn = document.getElementById('toggle-filters');
+  const filterPanel      = document.getElementById('filter-panel');
   const applyFiltersBtn  = document.getElementById('apply-filters');
 
   let currentPage = 1;
   const pageSize  = 16;
   let totalPages  = 1;
 
+  toggleFiltersBtn.addEventListener('click', () => {
+    filterPanel.classList.toggle('hidden');
+  });
+
+  applyFiltersBtn.addEventListener('click', () =>
+    fetchMovies(searchInput.value.trim(), 1)
+  );
+
   async function fetchMovies(query = '', page = 1) {
-    // mostra loading e limpa estado
     load.style.display      = 'block';
     errElem.style.display   = 'none';
     grid.innerHTML          = '';
@@ -57,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // ordenação (tem sempre um valor válido nos selects)
     params.append('sortField', sortFieldInput.value);
     params.append('sortOrder', sortOrderInput.value);
 
