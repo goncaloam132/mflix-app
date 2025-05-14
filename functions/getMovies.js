@@ -1,4 +1,3 @@
-// functions/getMovies.js
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 
@@ -46,7 +45,6 @@ exports.handler = async (event) => {
     const sortField  = event.queryStringParameters?.sortField  || 'year';
     const sortOrder  = event.queryStringParameters?.sortOrder === 'asc' ? 1 : -1;
 
-    // parse e clamp (só se vier definido e válido)
     let yearMin = null;
     if (rawMin != null) {
       const ym = parseInt(rawMin, 10);
