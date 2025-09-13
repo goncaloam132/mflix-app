@@ -33,7 +33,7 @@ A modern web application for managing a movie database, built with MongoDB, Netl
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/goncaloamorim/mflix-app.git
+git clone https://github.com/goncaloam132/mflix-app.git
 cd mflix-app
 ```
 
