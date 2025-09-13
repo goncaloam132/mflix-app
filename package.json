@@ -1,10 +1,22 @@
 {
-  "name": "mongodb-netlify-movie-app",
+  "name": "mflix-movie-database",
   "version": "1.0.0",
+  "description": "Modern web application for managing movie database with MongoDB and Netlify Functions",
+  "main": "index.js",
   "scripts": {
     "dev": "netlify dev",
-    "build": "netlify build"
+    "build": "netlify build",
+    "start": "netlify dev"
   },
+  "keywords": [
+    "movies",
+    "database",
+    "mongodb",
+    "netlify",
+    "javascript",
+    "web-app",
+    "mflix"
+  ],
   "dependencies": {
     "mongodb": "^5.7.0",
     "dotenv": "^16.3.1"
